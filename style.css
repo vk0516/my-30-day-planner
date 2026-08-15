@@ -402,3 +402,18 @@ body.dark .progress-bar {
   font-weight: 600;
   font-size: 14px;
 }
+.row > div {
+  flex: 1;
+}
+
+.row p {
+  display: block;
+  margin: 0 0 8px 0;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.row input {
+  width: 100%;
+  box-sizing: border-box;
+}
