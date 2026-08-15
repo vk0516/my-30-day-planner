@@ -391,3 +391,14 @@ body.dark .progress-bar {
     grid-template-columns: repeat(3,1fr);
   }
 }
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.input-group label {
+  font-weight: 600;
+  font-size: 14px;
+}
