@@ -1,4 +1,250 @@
-style.css
-script.js
-manifest.json
-service-worker.js
+<div class="app">
+
+  <header class="top-header">
+    <div>
+      <h1>📋 My 30-Day Planner</h1>
+      <p>Plan • Focus • Complete • Grow 🚀</p>
+    </div>
+
+    <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+  </header>
+
+  <section class="dashboard">
+
+    <div class="stat">
+      <strong id="totalTasks">0</strong>
+      <span>Total</span>
+    </div>
+
+    <div class="stat">
+      <strong id="completedTasks">0</strong>
+      <span>Completed</span>
+    </div>
+
+    <div class="stat">
+      <strong id="pendingTasks">0</strong>
+      <span>Pending</span>
+    </div>
+
+    <div class="stat">
+      <strong id="progressText">0%</strong>
+      <span>Success</span>
+    </div>
+
+  </section>
+
+  <section class="streak-card">
+    <div>
+      <h2>🔥 Current Streak</h2>
+      <p>Keep going!</p>
+    </div>
+
+    <strong id="streak">0 Days</strong>
+  </section>
+
+  <section>
+
+    <h2>🔍 Find Your Task</h2>
+
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Search tasks..."
+      oninput="renderTasks()"
+    >
+
+    <div class="filters">
+
+      <button onclick="setFilter('all')">All</button>
+
+      <button onclick="setFilter('today')">Today</button>
+
+      <button onclick="setFilter('tomorrow')">
+        Tomorrow
+      </button>
+
+      <button onclick="setFilter('completed')">
+        Completed
+      </button>
+
+      <button onclick="setFilter('pending')">
+        Pending
+      </button>
+
+    </div>
+
+  </section>
+
+  <section>
+
+    <h2>🎯 Daily Goal</h2>
+
+    <div class="goal-row">
+
+      <input
+        id="dailyGoal"
+        type="number"
+        min="1"
+        value="3"
+      >
+
+      <button onclick="saveGoal()">Save</button>
+
+    </div>
+
+    <p id="goalStatus">
+      Today: 0/3 tasks completed
+    </p>
+
+  </section>
+
+  <section>
+
+    <h2>📊 Overall Progress</h2>
+
+    <div class="progress-bar">
+      <div id="progressBar"></div>
+    </div>
+
+  </section>
+
+  <section>
+
+    <h2 id="formTitle">➕ Add New Task</h2>
+
+    <input
+      id="taskInput"
+      type="text"
+      placeholder="Enter your task"
+    >
+
+    <div class="row">
+
+      <input id="dateInput" type="date">
+
+      <input id="timeInput" type="time">
+
+    </div>
+
+    <select id="priorityInput">
+
+      <option value="Low">🟢 Low</option>
+      <option value="Medium">🟡 Medium</option>
+      <option value="High">🔴 High</option>
+
+    </select>
+
+    <label class="reminder">
+
+      <input id="reminderInput" type="checkbox">
+
+      ⏰ Enable Reminder
+
+    </label>
+
+    <button id="saveButton" onclick="saveTask()">
+      ➕ Add Task
+    </button>
+
+    <button
+      id="cancelButton"
+      class="cancel"
+      onclick="cancelEdit()"
+      style="display:none;">
+
+      Cancel
+
+    </button>
+
+  </section>
+
+  <section>
+
+    <div class="section-title">
+
+      <h2>📝 My Tasks</h2>
+
+      <span id="taskCount">0 Tasks</span>
+
+    </div>
+
+    <div id="taskList"></div>
+
+  </section>
+
+  <section>
+
+    <h2>🔥 30-Day Progress</h2>
+
+    <div id="daysGrid"></div>
+
+  </section>
+
+  <section class="report">
+
+    <h2>🏆 30-Day Challenge Report</h2>
+
+    <div class="report-grid">
+
+      <div>
+        <strong id="reportCompleted">0</strong>
+        <span>Completed</span>
+      </div>
+
+      <div>
+        <strong id="reportSuccess">0%</strong>
+        <span>Success</span>
+      </div>
+
+      <div>
+        <strong id="bestStreak">0</strong>
+        <span>Best Streak</span>
+      </div>
+
+    </div>
+
+    <div id="achievement" class="achievement">
+      🚀 Start your 30-day journey!
+    </div>
+
+  </section>
+
+  <!-- SETTINGS -->
+
+  <section class="settings">
+
+    <h2>⚙️ Settings & Backup</h2>
+
+    <button onclick="backupTasks()">
+      💾 Backup My Tasks
+    </button>
+
+    <label class="restore-btn">
+
+      📥 Restore Backup
+
+      <input
+        type="file"
+        id="restoreFile"
+        accept=".json"
+        onchange="restoreTasks(event)"
+        hidden
+      >
+
+    </label>
+
+    <button
+      class="danger"
+      onclick="clearAllTasks()">
+
+      🗑️ Clear All Tasks
+
+    </button>
+
+    <p class="backup-note">
+      💡 Backup regularly to keep your progress safe.
+    </p>
+
+  </section>
+
+</div>
