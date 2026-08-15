@@ -57,33 +57,22 @@ function saveTask() {
 
 
   if (!name) {
-
     alert("Please enter a task!");
-
     return;
-
   }
-
 
   if (!date) {
-
     alert("Please select a date!");
-
     return;
-
   }
-
 
   if (!time) {
-
     alert("Please select a time!");
-
     return;
-
   }
 
 
-  /* UPDATE */
+  /* EDIT EXISTING TASK */
 
   if (editingId !== null) {
 
@@ -94,13 +83,9 @@ function saveTask() {
     if (task) {
 
       task.name = name;
-
       task.date = date;
-
       task.time = time;
-
       task.priority = priority;
-
       task.reminder = reminder;
 
     }
@@ -118,7 +103,8 @@ function saveTask() {
 
   }
 
-  /* NEW TASK */
+
+  /* ADD NEW TASK */
 
   else {
 
@@ -145,14 +131,29 @@ function saveTask() {
   }
 
 
+  /* SAVE */
+
   saveData();
 
-  clearForm();
+
+  /* CLEAR FORM */
+
+  document.getElementById("taskInput").value = "";
+
+  document.getElementById("dateInput").value = "";
+
+  document.getElementById("timeInput").value = "";
+
+  document.getElementById("priorityInput").value = "Low";
+
+  document.getElementById("reminderInput").checked = false;
+
+
+  /* REFRESH EVERYTHING */
 
   render();
 
 }
-
 
 /* =========================
    CLEAR FORM
