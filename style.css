@@ -1,0 +1,393 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #eef2f7;
+  color: #172033;
+  padding: 15px;
+  transition: .3s;
+}
+
+.app {
+  max-width: 720px;
+  margin: auto;
+}
+
+.top-header {
+  background: #202a44;
+  color: white;
+  padding: 23px;
+  border-radius: 20px;
+  margin-bottom: 15px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top-header h1 {
+  margin-bottom: 7px;
+}
+
+.top-header p {
+  opacity: .8;
+}
+
+.theme-btn {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  background: white;
+  font-size: 20px;
+}
+
+section {
+  background: white;
+  padding: 20px;
+  border-radius: 18px;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,.06);
+}
+
+h2 {
+  margin-bottom: 15px;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 10px;
+}
+
+.stat {
+  text-align: center;
+  padding: 15px 5px;
+  border-radius: 14px;
+  background: #f5f7fa;
+}
+
+.stat strong {
+  display: block;
+  font-size: 23px;
+  margin-bottom: 5px;
+}
+
+.stat span {
+  font-size: 12px;
+  color: #777;
+}
+
+.streak-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff7ed;
+}
+
+.streak-card strong {
+  font-size: 24px;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 13px;
+  margin-bottom: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  padding: 13px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.filters {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+}
+
+.filters button {
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+.goal-row {
+  display: flex;
+  gap: 10px;
+}
+
+.goal-row input {
+  flex: 1;
+}
+
+.goal-row button {
+  width: 100px;
+}
+
+.progress-bar {
+  height: 15px;
+  background: #e5e7eb;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: #22c55e;
+  transition: .4s;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task {
+  border: 1px solid #e5e7eb;
+  padding: 13px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.task.completed {
+  opacity: .55;
+}
+
+.task.completed .task-name {
+  text-decoration: line-through;
+}
+
+.task-info {
+  flex: 1;
+}
+
+.task-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.task-details {
+  font-size: 12px;
+  color: #777;
+}
+
+.edit,
+.delete {
+  width: auto;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
+.edit {
+  background: #f59e0b;
+}
+
+.delete {
+  background: #ef4444;
+}
+
+.reminder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.reminder input {
+  width: auto;
+  margin: 0;
+}
+
+.cancel {
+  width: 100%;
+  margin-top: 8px;
+  background: #6b7280;
+}
+
+#daysGrid {
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 8px;
+}
+
+.day {
+  padding: 12px 4px;
+  text-align: center;
+  border-radius: 10px;
+  background: #eef2f7;
+  font-size: 12px;
+}
+
+.day.done {
+  background: #22c55e;
+  color: white;
+}
+
+.day.partial {
+  background: #f59e0b;
+  color: white;
+}
+
+.day.current {
+  border: 2px solid #2563eb;
+}
+
+.report {
+  text-align: center;
+}
+
+.report-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.report-grid div {
+  background: #f5f7fa;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+.report-grid strong {
+  display: block;
+  font-size: 23px;
+}
+
+.report-grid span {
+  font-size: 12px;
+  color: #777;
+}
+
+.achievement {
+  padding: 15px;
+  border-radius: 12px;
+  background: #fff7ed;
+  font-weight: bold;
+}
+
+/* BACKUP */
+
+.settings button {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.restore-btn {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: #22c55e;
+  color: white;
+  text-align: center;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.danger {
+  background: #ef4444;
+}
+
+.backup-note {
+  text-align: center;
+  color: #777;
+  font-size: 13px;
+}
+
+.empty {
+  text-align: center;
+  color: #888;
+  padding: 20px;
+}
+
+/* DARK MODE */
+
+body.dark {
+  background: #111827;
+  color: #f9fafb;
+}
+
+body.dark section {
+  background: #1f2937;
+}
+
+body.dark .stat,
+body.dark .report-grid div {
+  background: #374151;
+}
+
+body.dark input,
+body.dark select {
+  background: #374151;
+  color: white;
+  border-color: #4b5563;
+}
+
+body.dark .task {
+  border-color: #4b5563;
+}
+
+body.dark .day {
+  background: #374151;
+}
+
+body.dark .progress-bar {
+  background: #374151;
+}
+
+/* MOBILE */
+
+@media(max-width:500px) {
+
+  .dashboard {
+    grid-template-columns: repeat(2,1fr);
+  }
+
+  .row,
+  .goal-row {
+    flex-direction: column;
+  }
+
+  .goal-row button {
+    width: 100%;
+  }
+
+  #daysGrid {
+    grid-template-columns: repeat(5,1fr);
+  }
+
+  .task {
+    flex-wrap: wrap;
+  }
+
+  .report-grid {
+    grid-template-columns: repeat(3,1fr);
+  }
+}
