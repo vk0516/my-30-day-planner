@@ -1119,3 +1119,21 @@ if ("serviceWorker" in navigator) {
   });
 
 }
+console.log("Planner JS loaded");
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const saveButton =
+    document.getElementById("saveButton");
+
+  if (saveButton) {
+
+    saveButton.addEventListener("click", function () {
+
+      console.log("Save button clicked");
+
+    });
+
+  }
+
+});
