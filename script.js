@@ -1,150 +1,109 @@
-let tasks =
-  JSON.parse(localStorage.getItem("myTasks")) || [];
+let tasks = JSON.parse(localStorage.getItem("myTasks")) || [];
 
-let editingId = null;
+let dailyGoal = Number(localStorage.getItem("dailyGoal")) || 3;
 
 let currentFilter = "all";
 
-let dailyGoal =
-  Number(localStorage.getItem("dailyGoal")) || 3;
+let editingId = null;
 
 
-/* SAVE DATA */
+/* =========================
+   SAVE DATA
+========================= */
 
 function saveData() {
-
-  localStorage.setItem(
-    "myTasks",
-    JSON.stringify(tasks)
-  );
-
+  localStorage.setItem("myTasks", JSON.stringify(tasks));
 }
 
 
-/* DATE */
+/* =========================
+   DATE
+========================= */
 
-function getDateString(date) {
+function todayString() {
+
+  const date = new Date();
 
   const y = date.getFullYear();
 
-  const m =
-    String(date.getMonth() + 1)
-    .padStart(2,"0");
+  const m = String(date.getMonth() + 1).padStart(2, "0");
 
-  const d =
-    String(date.getDate())
-    .padStart(2,"0");
+  const d = String(date.getDate()).padStart(2, "0");
 
   return `${y}-${m}-${d}`;
-
 }
 
 
-/* GOAL */
-
-function saveGoal() {
-
-  const value =
-    Number(
-      document.getElementById("dailyGoal").value
-    );
-
-  if(value < 1) {
-
-    alert("Goal must be at least 1.");
-
-    return;
-  }
-
-  dailyGoal = value;
-
-  localStorage.setItem(
-    "dailyGoal",
-    dailyGoal
-  );
-
-  updateGoal();
-
-}
-
-
-function updateGoal() {
-
-  const today =
-    getDateString(new Date());
-
-  const completed =
-    tasks.filter(
-      task =>
-        task.date === today &&
-        task.completed
-    ).length;
-
-  document.getElementById("dailyGoal")
-    .value = dailyGoal;
-
-  document.getElementById("goalStatus")
-    .innerText =
-      `Today: ${completed}/${dailyGoal} tasks completed`;
-
-}
-
-
-/* ADD / EDIT TASK */
+/* =========================
+   ADD / UPDATE TASK
+========================= */
 
 function saveTask() {
 
   const name =
-    document.getElementById("taskInput")
-      .value.trim();
+    document.getElementById("taskInput").value.trim();
 
   const date =
-    document.getElementById("dateInput")
-      .value;
+    document.getElementById("dateInput").value;
 
   const time =
-    document.getElementById("timeInput")
-      .value;
+    document.getElementById("timeInput").value;
 
   const priority =
-    document.getElementById("priorityInput")
-      .value;
+    document.getElementById("priorityInput").value;
 
   const reminder =
-    document.getElementById("reminderInput")
-      .checked;
+    document.getElementById("reminderInput").checked;
 
 
-  if(!name || !date || !time) {
+  if (!name) {
 
-    alert(
-      "Please enter task, date and time!"
-    );
+    alert("Please enter a task!");
 
     return;
+
   }
 
 
-  if(editingId !== null) {
+  if (!date) {
 
-    tasks = tasks.map(task => {
+    alert("Please select a date!");
 
-      if(task.id === editingId) {
+    return;
 
-        return {
-          ...task,
-          name,
-          date,
-          time,
-          priority,
-          reminder
-        };
+  }
 
-      }
 
-      return task;
+  if (!time) {
 
-    });
+    alert("Please select a time!");
+
+    return;
+
+  }
+
+
+  /* UPDATE */
+
+  if (editingId !== null) {
+
+    const task = tasks.find(
+      t => t.id === editingId
+    );
+
+    if (task) {
+
+      task.name = name;
+
+      task.date = date;
+
+      task.time = time;
+
+      task.priority = priority;
+
+      task.reminder = reminder;
+
+    }
 
     editingId = null;
 
@@ -159,25 +118,29 @@ function saveTask() {
 
   }
 
+  /* NEW TASK */
+
   else {
 
-    tasks.push({
+    const newTask = {
 
       id: Date.now(),
 
-      name,
+      name: name,
 
-      date,
+      date: date,
 
-      time,
+      time: time,
 
-      priority,
+      priority: priority,
 
-      reminder,
+      reminder: reminder,
 
       completed: false
 
-    });
+    };
+
+    tasks.push(newTask);
 
   }
 
@@ -191,49 +154,52 @@ function saveTask() {
 }
 
 
-/* CLEAR FORM */
+/* =========================
+   CLEAR FORM
+========================= */
 
 function clearForm() {
 
-  document.getElementById("taskInput")
-    .value = "";
+  document.getElementById("taskInput").value = "";
 
-  document.getElementById("dateInput")
-    .value = "";
+  document.getElementById("dateInput").value = "";
 
-  document.getElementById("timeInput")
-    .value = "";
+  document.getElementById("timeInput").value = "";
 
-  document.getElementById("reminderInput")
-    .checked = false;
+  document.getElementById("priorityInput").value = "Low";
+
+  document.getElementById("reminderInput").checked = false;
 
 }
 
 
-/* EDIT */
+/* =========================
+   EDIT TASK
+========================= */
 
 function editTask(id) {
 
-  const task =
-    tasks.find(t => t.id === id);
+  const task = tasks.find(
+    t => t.id === id
+  );
 
-  if(!task) return;
+  if (!task) return;
 
 
-  document.getElementById("taskInput")
-    .value = task.name;
+  document.getElementById("taskInput").value =
+    task.name;
 
-  document.getElementById("dateInput")
-    .value = task.date;
+  document.getElementById("dateInput").value =
+    task.date;
 
-  document.getElementById("timeInput")
-    .value = task.time;
+  document.getElementById("timeInput").value =
+    task.time;
 
-  document.getElementById("priorityInput")
-    .value = task.priority;
+  document.getElementById("priorityInput").value =
+    task.priority;
 
-  document.getElementById("reminderInput")
-    .checked = task.reminder || false;
+  document.getElementById("reminderInput").checked =
+    task.reminder;
 
 
   editingId = id;
@@ -251,7 +217,9 @@ function editTask(id) {
 }
 
 
-/* CANCEL EDIT */
+/* =========================
+   CANCEL EDIT
+========================= */
 
 function cancelEdit() {
 
@@ -271,43 +239,21 @@ function cancelEdit() {
 }
 
 
-/* COMPLETE */
+/* =========================
+   COMPLETE TASK
+========================= */
 
 function toggleTask(id) {
 
-  tasks = tasks.map(task => {
+  const task = tasks.find(
+    t => t.id === id
+  );
 
-    if(task.id === id) {
-
-      return {
-        ...task,
-        completed: !task.completed
-      };
-
-    }
-
-    return task;
-
-  });
-
-saveData();
-render();
-updateDashboard();
-
-}
+  if (!task) return;
 
 
-/* DELETE */
+  task.completed = !task.completed;
 
-function deleteTask(id) {
-
-  if(!confirm("Delete this task?"))
-    return;
-
-  tasks =
-    tasks.filter(
-      task => task.id !== id
-    );
 
   saveData();
 
@@ -316,7 +262,33 @@ function deleteTask(id) {
 }
 
 
-/* FILTER */
+/* =========================
+   DELETE TASK
+========================= */
+
+function deleteTask(id) {
+
+  const answer =
+    confirm("Delete this task?");
+
+  if (!answer) return;
+
+
+  tasks = tasks.filter(
+    task => task.id !== id
+  );
+
+
+  saveData();
+
+  render();
+
+}
+
+
+/* =========================
+   FILTER
+========================= */
 
 function setFilter(filter) {
 
@@ -327,11 +299,14 @@ function setFilter(filter) {
 }
 
 
-/* FILTER TASKS */
+/* =========================
+   FILTER TASKS
+========================= */
 
 function getFilteredTasks() {
 
   let result = [...tasks];
+
 
   const search =
     document.getElementById("searchInput")
@@ -340,24 +315,20 @@ function getFilteredTasks() {
       .trim();
 
 
-  if(search) {
+  if (search) {
 
-    result =
-      result.filter(
-        task =>
-          task.name
-            .toLowerCase()
-            .includes(search)
-      );
+    result = result.filter(
+      task =>
+        task.name
+          .toLowerCase()
+          .includes(search)
+    );
 
   }
 
 
   const today =
-    new Date();
-
-  const todayString =
-    getDateString(today);
+    todayString();
 
 
   const tomorrow =
@@ -367,48 +338,45 @@ function getFilteredTasks() {
     tomorrow.getDate() + 1
   );
 
+
   const tomorrowString =
-    getDateString(tomorrow);
+    tomorrow.toISOString()
+      .split("T")[0];
 
 
-  if(currentFilter === "today") {
+  if (currentFilter === "today") {
 
-    result =
-      result.filter(
-        task =>
-          task.date === todayString
-      );
-
-  }
-
-
-  if(currentFilter === "tomorrow") {
-
-    result =
-      result.filter(
-        task =>
-          task.date === tomorrowString
-      );
+    result = result.filter(
+      task => task.date === today
+    );
 
   }
 
 
-  if(currentFilter === "completed") {
+  if (currentFilter === "tomorrow") {
 
-    result =
-      result.filter(
-        task => task.completed
-      );
+    result = result.filter(
+      task =>
+        task.date === tomorrowString
+    );
 
   }
 
 
-  if(currentFilter === "pending") {
+  if (currentFilter === "completed") {
 
-    result =
-      result.filter(
-        task => !task.completed
-      );
+    result = result.filter(
+      task => task.completed
+    );
+
+  }
+
+
+  if (currentFilter === "pending") {
+
+    result = result.filter(
+      task => !task.completed
+    );
 
   }
 
@@ -418,7 +386,9 @@ function getFilteredTasks() {
 }
 
 
-/* RENDER TASKS */
+/* =========================
+   SHOW TASKS
+========================= */
 
 function renderTasks() {
 
@@ -432,209 +402,304 @@ function renderTasks() {
     getFilteredTasks();
 
 
-  if(filtered.length === 0) {
+  if (filtered.length === 0) {
 
     list.innerHTML = `
       <div class="empty">
-        No matching tasks 🔍
+        No tasks found 🔍
       </div>
     `;
 
     return;
+
   }
 
 
-  filtered
-    .sort(
-      (a,b) =>
-        (a.date+a.time)
+  filtered.sort(
+    (a, b) =>
+      (a.date + a.time)
         .localeCompare(
-          b.date+b.time
+          b.date + b.time
         )
-    )
-    .forEach(task => {
-
-      const div =
-        document.createElement("div");
-
-      div.className =
-        "task " +
-        (task.completed
-          ? "completed"
-          : "");
+  );
 
 
-      div.innerHTML = `
+  filtered.forEach(task => {
 
-        <input
-          type="checkbox"
-          ${task.completed ? "checked" : ""}
-          onchange="toggleTask(${task.id})"
-        >
+    const div =
+      document.createElement("div");
 
-        <div class="task-info">
 
-          <div class="task-name">
-            ${task.name}
-          </div>
+    div.className =
+      "task " +
+      (task.completed
+        ? "completed"
+        : "");
 
-          <div class="task-details">
 
-            📅 ${task.date}
-            &nbsp; ⏰ ${task.time}
+    div.innerHTML = `
 
-            <br>
+      <input
+        type="checkbox"
+        ${task.completed ? "checked" : ""}
+        onchange="toggleTask(${task.id})"
+      >
 
-            Priority: ${task.priority}
+      <div class="task-info">
 
-            ${
-              task.reminder
-              ? " ⏰ Reminder"
+        <div class="task-name">
+          ${escapeHTML(task.name)}
+        </div>
+
+        <div class="task-details">
+
+          📅 ${task.date}
+
+          &nbsp;
+
+          ⏰ ${task.time}
+
+          <br>
+
+          Priority:
+          ${task.priority}
+
+          ${
+            task.reminder
+              ? " ⏰ Reminder ON"
               : ""
-            }
+          }
 
-          </div>
+          <br>
+
+          ${
+            task.completed
+              ? "✅ Completed"
+              : "⏳ Pending"
+          }
 
         </div>
 
-        <button
-          class="edit"
-          onclick="editTask(${task.id})">
+      </div>
 
-          ✏️
+      <button
+        class="edit"
+        onclick="editTask(${task.id})">
 
-        </button>
+        ✏️
 
-        <button
-          class="delete"
-          onclick="deleteTask(${task.id})">
+      </button>
 
-          🗑️
+      <button
+        class="delete"
+        onclick="deleteTask(${task.id})">
 
-        </button>
+        🗑️
 
-      `;
+      </button>
+
+    `;
 
 
-      list.appendChild(div);
+    list.appendChild(div);
 
-    });
+  });
 
 }
 
 
-/* STATISTICS */
+/* =========================
+   DASHBOARD
+========================= */
 
 function updateStats() {
 
   const total =
     tasks.length;
 
+
   const completed =
     tasks.filter(
-      t => t.completed
+      task => task.completed === true
     ).length;
+
 
   const pending =
     total - completed;
+
 
   const progress =
     total === 0
       ? 0
       : Math.round(
-          completed / total * 100
+          (completed / total) * 100
         );
 
 
   document.getElementById("totalTasks")
     .innerText = total;
 
+
   document.getElementById("completedTasks")
     .innerText = completed;
+
 
   document.getElementById("pendingTasks")
     .innerText = pending;
 
+
   document.getElementById("progressText")
     .innerText = progress + "%";
 
+
   document.getElementById("progressBar")
     .style.width = progress + "%";
-
-  document.getElementById("taskCount")
-    .innerText = total + " Tasks";
 
 
   document.getElementById("reportCompleted")
     .innerText = completed;
 
+
   document.getElementById("reportSuccess")
     .innerText = progress + "%";
 
 
-  if(progress >= 90) {
+  const achievement =
+    document.getElementById("achievement");
 
-    document.getElementById("achievement")
-      .innerText =
-      "🏆 Outstanding! Productivity Champion!";
 
-  }
+  if (progress === 100 && total > 0) {
 
-  else if(progress >= 70) {
-
-    document.getElementById("achievement")
-      .innerText =
-      "🔥 Great job! Keep going!";
+    achievement.innerText =
+      "🏆 Amazing! All tasks completed!";
 
   }
 
-  else if(progress >= 40) {
+  else if (progress >= 75) {
 
-    document.getElementById("achievement")
-      .innerText =
-      "💪 Good progress! Stay consistent!";
+    achievement.innerText =
+      "🔥 Excellent progress!";
+
+  }
+
+  else if (progress >= 50) {
+
+    achievement.innerText =
+      "💪 More than halfway! Keep going!";
+
+  }
+
+  else if (progress > 0) {
+
+    achievement.innerText =
+      "🚀 Good start! Keep going!";
 
   }
 
   else {
 
-    document.getElementById("achievement")
-      .innerText =
-      "🚀 Start your journey!";
+    achievement.innerText =
+      "🎯 Add your first task!";
 
   }
 
 }
 
 
-/* 30 DAYS */
+/* =========================
+   DAILY GOAL
+========================= */
+
+function saveGoal() {
+
+  const value =
+    Number(
+      document.getElementById("dailyGoal").value
+    );
+
+
+  if (value < 1) {
+
+    alert("Goal must be at least 1.");
+
+    return;
+
+  }
+
+
+  dailyGoal = value;
+
+
+  localStorage.setItem(
+    "dailyGoal",
+    dailyGoal
+  );
+
+
+  updateGoal();
+
+}
+
+
+function updateGoal() {
+
+  const today =
+    todayString();
+
+
+  const completedToday =
+    tasks.filter(
+      task =>
+        task.date === today &&
+        task.completed
+    ).length;
+
+
+  document.getElementById("dailyGoal")
+    .value = dailyGoal;
+
+
+  document.getElementById("goalStatus")
+    .innerText =
+      `Today: ${completedToday}/${dailyGoal} tasks completed`;
+
+}
+
+
+/* =========================
+   30 DAY TRACKER
+========================= */
 
 function updateDays() {
 
   const grid =
     document.getElementById("daysGrid");
 
+
   grid.innerHTML = "";
 
 
-  const today =
+  const start =
     new Date();
 
-  today.setHours(0,0,0,0);
+
+  start.setHours(0, 0, 0, 0);
 
 
-  for(let i=0; i<30; i++) {
+  for (let i = 0; i < 30; i++) {
 
     const date =
-      new Date(today);
+      new Date(start);
+
 
     date.setDate(
-      today.getDate() + i
+      start.getDate() + i
     );
 
 
     const dateString =
-      getDateString(date);
+      date.toISOString()
+        .split("T")[0];
 
 
     const dayTasks =
@@ -654,10 +719,11 @@ function updateDays() {
     const div =
       document.createElement("div");
 
+
     div.className = "day";
 
 
-    if(
+    if (
       dayTasks.length > 0 &&
       completed === dayTasks.length
     ) {
@@ -666,14 +732,14 @@ function updateDays() {
 
     }
 
-    else if(completed > 0) {
+    else if (completed > 0) {
 
       div.classList.add("partial");
 
     }
 
 
-    if(i === 0) {
+    if (i === 0) {
 
       div.classList.add("current");
 
@@ -681,11 +747,9 @@ function updateDays() {
 
 
     div.innerHTML = `
-      <strong>Day ${i+1}</strong>
+      <strong>Day ${i + 1}</strong>
       <br>
       ${completed}/${dayTasks.length}
-      <br>
-      ${i === 0 ? "Today" : ""}
     `;
 
 
@@ -696,22 +760,29 @@ function updateDays() {
 }
 
 
-/* STREAK */
+/* =========================
+   STREAK
+========================= */
 
 function calculateStreak() {
 
   let streak = 0;
 
+
   const today =
     new Date();
 
-  today.setHours(0,0,0,0);
+
+  today.setHours(
+    0, 0, 0, 0
+  );
 
 
-  for(let i=0; i<30; i++) {
+  for (let i = 0; i < 30; i++) {
 
     const date =
       new Date(today);
+
 
     date.setDate(
       today.getDate() - i
@@ -719,7 +790,8 @@ function calculateStreak() {
 
 
     const dateString =
-      getDateString(date);
+      date.toISOString()
+        .split("T")[0];
 
 
     const dayTasks =
@@ -729,7 +801,7 @@ function calculateStreak() {
       );
 
 
-    if(
+    if (
       dayTasks.length > 0 &&
       dayTasks.every(
         task =>
@@ -749,28 +821,28 @@ function calculateStreak() {
 
   }
 
+
   return streak;
 
 }
 
 
-/* BEST STREAK */
-
 function calculateBestStreak() {
 
-  const dates =
-    [...new Set(
-      tasks
-        .filter(
-          task =>
-            task.completed
-        )
-        .map(
-          task =>
-            task.date
-        )
-    )]
-    .sort();
+  const completedDates =
+    [
+      ...new Set(
+        tasks
+          .filter(
+            task =>
+              task.completed
+          )
+          .map(
+            task =>
+              task.date
+          )
+      )
+    ].sort();
 
 
   let best = 0;
@@ -780,19 +852,19 @@ function calculateBestStreak() {
   let previous = null;
 
 
-  dates.forEach(date => {
+  completedDates.forEach(date => {
 
-    if(previous) {
+    if (previous) {
 
       const difference =
         (
           new Date(date) -
           new Date(previous)
         ) /
-        (1000*60*60*24);
+        (1000 * 60 * 60 * 24);
 
 
-      if(difference === 1) {
+      if (difference === 1) {
 
         current++;
 
@@ -819,6 +891,7 @@ function calculateBestStreak() {
         current
       );
 
+
     previous = date;
 
   });
@@ -829,12 +902,11 @@ function calculateBestStreak() {
 }
 
 
-/* UPDATE STREAK */
-
 function updateStreak() {
 
   const current =
     calculateStreak();
+
 
   const best =
     calculateBestStreak();
@@ -842,23 +914,28 @@ function updateStreak() {
 
   document.getElementById("streak")
     .innerText =
-    current + " Days";
+      current + " Days";
+
 
   document.getElementById("bestStreak")
     .innerText =
-    best;
+      best;
 
 }
 
 
-/* DARK MODE */
+/* =========================
+   DARK MODE
+========================= */
 
 function toggleTheme() {
 
   document.body.classList.toggle("dark");
 
+
   const dark =
     document.body.classList.contains("dark");
+
 
   localStorage.setItem(
     "darkMode",
@@ -868,43 +945,49 @@ function toggleTheme() {
 }
 
 
-/* BACKUP */
+/* =========================
+   BACKUP
+========================= */
 
 function backupTasks() {
 
-  if(tasks.length === 0) {
+  if (tasks.length === 0) {
 
-    alert("No tasks available for backup.");
+    alert(
+      "There are no tasks to backup."
+    );
 
     return;
+
   }
 
 
   const backup = {
 
-    app: "My 30-Day Planner",
+    app:
+      "My 30-Day Planner",
 
     created:
       new Date().toISOString(),
 
-    tasks: tasks,
+    tasks:
+      tasks,
 
-    dailyGoal: dailyGoal
+    dailyGoal:
+      dailyGoal
 
   };
 
 
-  const data =
-    JSON.stringify(
-      backup,
-      null,
-      2
-    );
-
-
   const blob =
     new Blob(
-      [data],
+      [
+        JSON.stringify(
+          backup,
+          null,
+          2
+        )
+      ],
       {
         type:
           "application/json"
@@ -932,6 +1015,7 @@ function backupTasks() {
 
   document.body.removeChild(link);
 
+
   URL.revokeObjectURL(url);
 
 
@@ -942,14 +1026,17 @@ function backupTasks() {
 }
 
 
-/* RESTORE */
+/* =========================
+   RESTORE
+========================= */
 
 function restoreTasks(event) {
 
   const file =
     event.target.files[0];
 
-  if(!file) return;
+
+  if (!file) return;
 
 
   const reader =
@@ -967,7 +1054,7 @@ function restoreTasks(event) {
           );
 
 
-        if(
+        if (
           !backup.tasks ||
           !Array.isArray(
             backup.tasks
@@ -983,27 +1070,29 @@ function restoreTasks(event) {
         }
 
 
-        const confirmRestore =
-          confirm(
+        if (
+          !confirm(
             "Restore this backup?\n\n" +
-            "Your current tasks will be replaced."
-          );
+            "Current tasks will be replaced."
+          )
+        ) {
 
-
-        if(!confirmRestore)
           return;
+
+        }
 
 
         tasks =
           backup.tasks;
 
 
-        if(backup.dailyGoal) {
+        if (backup.dailyGoal) {
 
           dailyGoal =
             Number(
               backup.dailyGoal
             );
+
 
           localStorage.setItem(
             "dailyGoal",
@@ -1024,7 +1113,7 @@ function restoreTasks(event) {
 
       }
 
-      catch(error) {
+      catch (error) {
 
         alert(
           "❌ Could not read backup file."
@@ -1040,31 +1129,37 @@ function restoreTasks(event) {
 }
 
 
-/* CLEAR ALL */
+/* =========================
+   CLEAR ALL
+========================= */
 
 function clearAllTasks() {
 
-  if(tasks.length === 0) {
+  if (tasks.length === 0) {
 
-    alert("No tasks to delete.");
+    alert(
+      "There are no tasks."
+    );
 
     return;
 
   }
 
 
-  const confirmDelete =
-    confirm(
+  if (
+    !confirm(
       "⚠️ Delete ALL tasks?\n\n" +
       "This cannot be undone unless you have a backup."
-    );
+    )
+  ) {
 
-
-  if(!confirmDelete)
     return;
+
+  }
 
 
   tasks = [];
+
 
   saveData();
 
@@ -1078,9 +1173,48 @@ function clearAllTasks() {
 }
 
 
-/* LOAD DARK MODE */
+/* =========================
+   HTML SECURITY
+========================= */
 
-if(
+function escapeHTML(text) {
+
+  const div =
+    document.createElement("div");
+
+
+  div.textContent = text;
+
+
+  return div.innerHTML;
+
+}
+
+
+/* =========================
+   MAIN RENDER
+========================= */
+
+function render() {
+
+  renderTasks();
+
+  updateStats();
+
+  updateGoal();
+
+  updateDays();
+
+  updateStreak();
+
+}
+
+
+/* =========================
+   DARK MODE LOAD
+========================= */
+
+if (
   localStorage.getItem(
     "darkMode"
   ) === "true"
@@ -1091,84 +1225,63 @@ if(
 }
 
 
-/* START */
+/* =========================
+   INITIAL LOAD
+========================= */
 
-document.getElementById(
-  "dailyGoal"
-).value = dailyGoal;
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
 
-render();
-/* SERVICE WORKER */
+    const goal =
+      document.getElementById(
+        "dailyGoal"
+      );
 
-if ("serviceWorker" in navigator) {
 
-  window.addEventListener("load", () => {
+    if (goal) {
 
-    navigator.serviceWorker
-      .register("./service-worker.js")
-      .then(() => {
-        console.log("✅ App is ready for offline use");
-      })
-      .catch(error => {
-        console.log(
-          "Service Worker Error:",
-          error
-        );
-      });
+      goal.value =
+        dailyGoal;
 
-  });
+    }
 
-}
-console.log("Planner JS loaded");
 
-document.addEventListener("DOMContentLoaded", function () {
-
-  const saveButton =
-    document.getElementById("saveButton");
-
-  if (saveButton) {
-
-    saveButton.addEventListener("click", function () {
-
-      console.log("Save button clicked");
-
-    });
+    render();
 
   }
+);
 
-});
-function updateDashboard() {
 
-  const total = tasks.length;
+/* =========================
+   SERVICE WORKER
+========================= */
 
-  const completed = tasks.filter(
-    task => task.completed === true
-  ).length;
+if (
+  "serviceWorker" in navigator
+) {
 
-  const pending = total - completed;
+  window.addEventListener(
+    "load",
+    function() {
 
-  const progress =
-    total === 0
-      ? 0
-      : Math.round((completed / total) * 100);
+      navigator.serviceWorker
+        .register(
+          "./service-worker.js"
+        )
+        .then(
+          () => console.log(
+            "✅ Offline mode ready"
+          )
+        )
+        .catch(
+          error => console.log(
+            "Service Worker Error:",
+            error
+          )
+        );
 
-  document.getElementById("totalTasks").textContent = total;
+    }
+  );
 
-  document.getElementById("completedTasks").textContent =
-    completed;
-
-  document.getElementById("pendingTasks").textContent =
-    pending;
-
-  document.getElementById("progressText").textContent =
-    progress + "%";
-
-  document.getElementById("progressBar").style.width =
-    progress + "%";
-
-  document.getElementById("reportCompleted").textContent =
-    completed;
-
-  document.getElementById("reportSuccess").textContent =
-    progress + "%";
 }
