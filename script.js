@@ -1098,3 +1098,24 @@ document.getElementById(
 ).value = dailyGoal;
 
 render();
+/* SERVICE WORKER */
+
+if ("serviceWorker" in navigator) {
+
+  window.addEventListener("load", () => {
+
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then(() => {
+        console.log("✅ App is ready for offline use");
+      })
+      .catch(error => {
+        console.log(
+          "Service Worker Error:",
+          error
+        );
+      });
+
+  });
+
+}
