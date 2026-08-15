@@ -1,0 +1,10 @@
+{
+  "name": "My 30-Day Planner",
+  "short_name": "30-Day Planner",
+  "description": "Personal 30-Day To-Do and Productivity Planner",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#eef2f7",
+  "theme_color": "#202a44",
+  "orientation": "portrait"
+}
