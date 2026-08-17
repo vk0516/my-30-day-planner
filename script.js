@@ -1286,3 +1286,65 @@ if (
   );
 
 }
+// =========================
+// REAL TASK REMINDER
+// =========================
+
+function checkTaskReminders() {
+
+  if (!("Notification" in window)) return;
+
+  if (Notification.permission !== "granted") return;
+
+  const now = new Date();
+
+  const currentDate =
+    now.getFullYear() + "-" +
+    String(now.getMonth() + 1).padStart(2, "0") + "-" +
+    String(now.getDate()).padStart(2, "0");
+
+  const currentTime =
+    String(now.getHours()).padStart(2, "0") + ":" +
+    String(now.getMinutes()).padStart(2, "0");
+
+  tasks.forEach(task => {
+
+    if (
+      task.reminder === true &&
+      task.completed === false &&
+      task.date === currentDate &&
+      task.time === currentTime
+    ) {
+
+      const reminderKey =
+        "reminded_" + task.id + "_" + currentDate + "_" + currentTime;
+
+      if (!localStorage.getItem(reminderKey)) {
+
+        new Notification("🔔 Task Reminder", {
+          body: "⏰ " + task.name
+        });
+
+        localStorage.setItem(
+          reminderKey,
+          "true"
+        );
+
+      }
+
+    }
+
+  });
+
+}
+
+
+// Check every 30 seconds
+setInterval(
+  checkTaskReminders,
+  30000
+);
+
+
+// Check immediately
+checkTaskReminders();
