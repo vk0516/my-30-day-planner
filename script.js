@@ -54,12 +54,15 @@ function saveTask() {
 
   const reminder =
     document.getElementById("reminderInput").checked;
+   const repeat =
+  document.getElementById("repeatInput").value;
 
 
   if (!name) {
     alert("Please enter a task!");
     return;
   }
+   
 
   if (!date) {
     alert("Please select a date!");
@@ -121,6 +124,7 @@ function saveTask() {
       priority: priority,
 
       reminder: reminder,
+       repeat: repeat,
 
       completed: false
 
@@ -147,6 +151,7 @@ function saveTask() {
   document.getElementById("priorityInput").value = "Low";
 
   document.getElementById("reminderInput").checked = false;
+   document.getElementById("repeatInput").value = "once";
 
 
   /* REFRESH EVERYTHING */
@@ -170,7 +175,8 @@ function clearForm() {
   document.getElementById("priorityInput").value = "Low";
 
   document.getElementById("reminderInput").checked = false;
-
+   
+  document.getElementById("repeatInput").value = "once";
 }
 
 
